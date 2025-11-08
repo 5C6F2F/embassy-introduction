@@ -1,0 +1,18 @@
+services:
+  embassy:
+    privileged: true
+    tty: true
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    volumes:
+      - type: bind
+        source: ../
+        target: /embassy
+      - type: bind
+        source: ~/.ssh
+        target: /root/.ssh
+      - type: bind
+        source: /dev/
+        target: /dev/
+    command: [ "bash" ]
