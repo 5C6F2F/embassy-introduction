@@ -68,6 +68,7 @@ async fn update_and_send_loop(
 ) {
     loop {
         encoder.update();
+        sender.clear();
         sender.send(encoder.get_count()).await;
         Timer::after_millis(5).await;
     }
@@ -82,6 +83,7 @@ async fn print_encoder(receiver: Receiver<'static, CriticalSectionRawMutex, i64,
             info!("{}", count);
             last_count = count;
         }
+        Timer::after_millis(500).await;
     }
 }
 
