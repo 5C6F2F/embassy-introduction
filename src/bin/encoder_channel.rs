@@ -76,13 +76,8 @@ async fn update_and_send_loop(
 
 #[embassy_executor::task(pool_size = 2)]
 async fn print_encoder(receiver: Receiver<'static, CriticalSectionRawMutex, i64, 1>) {
-    let mut last_count = 0;
     loop {
-        let count = receiver.receive().await;
-        if count != last_count {
-            info!("{}", count);
-            last_count = count;
-        }
+        info!("{}", receiver.receive().await);
         Timer::after_millis(500).await;
     }
 }

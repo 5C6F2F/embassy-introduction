@@ -61,13 +61,8 @@ async fn update_encoder(
 
 #[embassy_executor::task(pool_size = 2)]
 async fn print_encoder_count(count: &'static AtomicI32) {
-    let mut last_count = 0;
     loop {
-        let count = count.load(Ordering::Relaxed);
-        if count != last_count {
-            info!("{}", count);
-            last_count = count;
-        }
+        info!("{}", count.load(Ordering::Relaxed));
         Timer::after_millis(500).await;
     }
 }

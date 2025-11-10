@@ -70,13 +70,8 @@ async fn update_encoder(
 
 #[embassy_executor::task(pool_size = 2)]
 async fn print_encoder_count(count: &'static CriticalSectionMutex<RefCell<i32>>) {
-    let mut last_count = 0;
     loop {
-        let count = count.lock(|count| count.take());
-        if count != last_count {
-            info!("{}", count);
-            last_count = count;
-        }
+        info!("{}", count.lock(|ref_cell| ref_cell.take()));
         Timer::after_millis(500).await;
     }
 }
