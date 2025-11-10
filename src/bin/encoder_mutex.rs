@@ -71,7 +71,7 @@ async fn update_encoder(
 #[embassy_executor::task(pool_size = 2)]
 async fn print_encoder_count(count: &'static CriticalSectionMutex<RefCell<i32>>) {
     loop {
-        info!("{}", count.lock(|ref_cell| ref_cell.take()));
+        info!("{}", count.lock(|ref_cell| *ref_cell.borrow()));
         Timer::after_millis(500).await;
     }
 }
