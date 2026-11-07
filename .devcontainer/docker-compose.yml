@@ -1,5 +1,5 @@
 services:
-  embassy:
+  embassy-introduction:
     privileged: true
     tty: true
     build:
@@ -8,10 +8,10 @@ services:
     volumes:
       - type: bind
         source: ../
-        target: /embassy
+        target: /embassy-introduction
       - type: bind
         source: ~/.ssh
-        target: /root/.ssh
+        target: /home/ubuntu/.ssh
       - type: bind
         source: /dev/
         target: /dev/

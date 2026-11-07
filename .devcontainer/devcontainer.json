@@ -1,8 +1,8 @@
 {
-  "name": "embassy",
+  "name": "embassy-introduction",
   "dockerComposeFile": "./docker-compose.yml",
-  "service": "embassy",
-  "workspaceFolder": "/embassy",
+  "service": "embassy-introduction",
+  "workspaceFolder": "/embassy-introduction",
   "customizations": {
     "vscode": {
       "extensions": [
