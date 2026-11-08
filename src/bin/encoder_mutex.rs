@@ -9,7 +9,7 @@ use embassy_stm32::{
     peripherals::{TIM1, TIM2},
     timer::{
         GeneralInstance4Channel, TimerPin,
-        qei::{self, Qei, QeiPin},
+        qei::{self, Qei},
     },
 };
 use embassy_sync::blocking_mutex::CriticalSectionMutex;
@@ -30,15 +30,11 @@ async fn main(spawner: Spawner) {
     static ENCODER2_COUNT: CriticalSectionMutex<RefCell<i32>> =
         CriticalSectionMutex::new(RefCell::new(0));
 
-    spawner
-        .spawn(update_encoder_tim1(encoder1, &ENCODER1_COUNT))
-        .unwrap();
-    spawner.spawn(print_encoder_count(&ENCODER1_COUNT)).unwrap();
+    spawner.spawn(update_encoder_tim1(encoder1, &ENCODER1_COUNT).unwrap());
+    spawner.spawn(print_encoder_count(&ENCODER1_COUNT).unwrap());
 
-    spawner
-        .spawn(update_encoder_tim2(encoder2, &ENCODER2_COUNT))
-        .unwrap();
-    spawner.spawn(print_encoder_count(&ENCODER2_COUNT)).unwrap();
+    spawner.spawn(update_encoder_tim2(encoder2, &ENCODER2_COUNT).unwrap());
+    spawner.spawn(print_encoder_count(&ENCODER2_COUNT).unwrap());
 }
 
 #[embassy_executor::task]
@@ -99,13 +95,10 @@ impl<'d, T: GeneralInstance4Channel> Encoder<'d, T> {
         ppr: u32,
         direction: RotateDirection,
     ) -> Self {
-        let phase_a_pin = QeiPin::new(phase_a_pin);
-        let phase_b_pin = QeiPin::new(phase_b_pin);
-
         // QEIではA相とB相の立ち上がり/立ち下がりを用いて4逓倍でカウントされる
         let qei_resolution = ppr * 4;
 
-        let qei = Qei::new(tim, phase_a_pin, phase_b_pin);
+        let qei = Qei::new(tim, phase_a_pin, phase_b_pin, qei::Config::default());
 
         // 現在のハードウェアカウントを読み取り、初期値とする
         let last_hw_count = qei.count();

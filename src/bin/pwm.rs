@@ -29,7 +29,7 @@ async fn main(spawner: Spawner) {
     );
 
     let chs = simple_pwm.split();
-    spawner.spawn(pwm(chs.ch1)).unwrap();
+    spawner.spawn(pwm(chs.ch1).unwrap());
 }
 
 #[embassy_executor::task]
